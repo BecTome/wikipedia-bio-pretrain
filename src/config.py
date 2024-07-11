@@ -8,3 +8,5 @@ MIN_DEPTH = 0
 
 LOG_FOLDER = "logs"
 OUTPUT_FOLDER = "output"
+
+CATEGORIES_FILE = "output/subcategories/es/10072024_195524/subcategories_es.txt"
