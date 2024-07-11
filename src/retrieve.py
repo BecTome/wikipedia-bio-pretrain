@@ -1,6 +1,4 @@
 import wikipediaapi
-import concurrent.futures
-from tqdm import tqdm
 from time import sleep
 import src.config as config
 
@@ -36,14 +34,30 @@ def get_subcategories(category, depth, max_depth, output=None):
 
     return subcategories
 
-def get_articles(category, articles_set):
-    articles = []
+def get_articles_from_cat(category_name, wiki):
+    articles = set()
+    category_name = f"Category:{category_name}"
+    category = wiki.page(category_name)
     for member in category.categorymembers.values():
         if member.ns == wikipediaapi.Namespace.MAIN:
-            if member.title not in articles_set:
-                articles.append(member)
-                articles_set.add(member.title)
+            articles.add(member)
     return articles
+
+def get_article(name, wiki):
+    articles_set = set()
+    page = wiki.page(name)
+
+    if (page.ns == wikipediaapi.Namespace.MAIN)&(page.exists())&(page.text != ''):
+        art_text = repr(page.text)
+        # Build the article URL
+        art_url = f"https://{page.language}.wikipedia.org/wiki/{page.title.replace(' ', '_')}"
+        if page.title not in articles_set:
+            articles_set.add((art_url, art_text))
+
+    return articles_set
 
 def fetch_subcategories(subcategory):
     return get_subcategories(subcategory, config.MIN_DEPTH, config.MAX_DEPTH)
+
+def fetch_articles(category, wiki):
+    return get_articles_from_cat(category, wiki)
