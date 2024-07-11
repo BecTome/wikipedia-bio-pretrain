@@ -13,7 +13,7 @@ from src.utils import setup_logging, create_output_folder
 timestamp = datetime.now().strftime('%d%m%Y_%H%M%S')
 log_folder = config.LOG_FOLDER
 output_folder_name = config.OUTPUT_FOLDER
-log_output = os.path.join(log_folder, timestamp)
+log_output = os.path.join(log_folder, "articles", timestamp)
 
 
 def main():
