@@ -29,22 +29,26 @@ def main():
     category = wiki.page(config.D_LANG_CAT[lan])
     logging.info(f"Get subcategories from Category: {category.title}")
     
-    with open(output_file, "w") as output:
-        output.write(f"{category.title}\n")
+    # with open(output_file, "a") as output:
+    #     output.write(f"{category.title}\n")
         
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(fetch_subcategories, subcategory, output)
-                for subcategory in category.categorymembers.values()
-                if subcategory.ns == wikipediaapi.Namespace.CATEGORY
-            ]
-            
-            subcategories = []
-            for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
-                try:
-                    subcategories.extend(future.result())
-                except Exception as e:
-                    logging.error(f"Error fetching subcategories: {e}")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(fetch_subcategories, subcategory)
+            for subcategory in category.categorymembers.values()
+            if subcategory.ns == wikipediaapi.Namespace.CATEGORY
+        ]
+        
+        subcategories = []
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
+            try:
+                subcategories.extend(future.result())
+            except Exception as e:
+                logging.error(f"Error fetching subcategories: {e}")
+
+    with open(output_file, "a") as output:
+        for subcategory in subcategories:
+                output.write(f"{subcategory}\n")
 
 if __name__ == "__main__":
     try:
