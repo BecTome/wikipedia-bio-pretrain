@@ -45,5 +45,5 @@ def get_articles(category, articles_set):
                 articles_set.add(member.title)
     return articles
 
-def fetch_subcategories(subcategory, output):
-    return get_subcategories(subcategory, config.MIN_DEPTH, config.MAX_DEPTH, output=output)
+def fetch_subcategories(subcategory):
+    return get_subcategories(subcategory, config.MIN_DEPTH, config.MAX_DEPTH)
