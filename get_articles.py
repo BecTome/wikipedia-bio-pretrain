@@ -48,11 +48,17 @@ def main():
 
     with open(output_file, "a") as output:
         for article in list(articles):
+                output.write(f"{repr(article.text)}\n")
+    
+    url_output_file = output_file.replace(f"articles_{lan}.txt", f"url_articles_{lan}.txt")
+    with open(url_output_file, "a") as output:
+        for article in list(articles):
                 try:
                     url = article.fullurl
                 except:
                     url = f"https://{lan}.wikipedia.org/wiki/{article.title.replace(' ', '_')}"
-                output.write(f"{url}||{repr(article.text)}\n")
+    
+                output.write(f"{url}\n")
 
 if __name__ == "__main__":
     try:
