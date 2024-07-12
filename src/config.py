@@ -3,7 +3,7 @@ D_LANG_CAT = {"es": "Categoría:Ciencias de la vida",
 
 AGENT = "MyProjectName (merlin@example.com)"
 
-MAX_DEPTH = 4
+MAX_DEPTH = 5
 MIN_DEPTH = 0
 
 LOG_FOLDER = "logs"
