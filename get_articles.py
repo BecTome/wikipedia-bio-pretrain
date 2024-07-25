@@ -7,7 +7,7 @@ import logging
 import traceback
 
 from src import config
-from src.retrieve import fetch_articles
+from src.retrieve import fetch_articles, get_page_text_without_sections
 from src.utils import setup_logging, create_output_folder
 
 timestamp = datetime.now().strftime('%d%m%Y_%H%M%S')
@@ -48,17 +48,23 @@ def main():
 
     with open(output_file, "a") as output:
         for article in list(articles):
-                output.write(f"{repr(article.text)}\n")
-    
-    url_output_file = output_file.replace(f"articles_{lan}.txt", f"url_articles_{lan}.txt")
-    with open(url_output_file, "a") as output:
-        for article in list(articles):
                 try:
                     url = article.fullurl
                 except:
                     url = f"https://{lan}.wikipedia.org/wiki/{article.title.replace(' ', '_')}"
+                text = get_page_text_without_sections(article)
+                # format <doc id="1" url="https://ca.wikipedia.org/wiki?curid=1" title="Àbac">
+                output.write(f"<doc id=\"{article.pageid}\" url=\"{url}\" title=\"{article.title}\">\n{text}\n</doc>\n")
+
+    # url_output_file = output_file.replace(f"articles_{lan}.txt", f"url_articles_{lan}.txt")
+    # with open(url_output_file, "a") as output:
+    #     for article in list(articles):
+    #             try:
+    #                 url = article.fullurl
+    #             except:
+    #                 url = f"https://{lan}.wikipedia.org/wiki/{article.title.replace(' ', '_')}"
     
-                output.write(f"{url}\n")
+    #             output.write(f"{url}\n")
 
 if __name__ == "__main__":
     try:
