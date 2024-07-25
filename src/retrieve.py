@@ -34,6 +34,17 @@ def get_subcategories(category, depth, max_depth, output=None):
 
     return subcategories
 
+def get_page_text_without_sections(page):
+    """
+    Recursively extract text from the page, excluding section titles.
+    """
+    text = ""
+    for section in page.sections:
+        # if section.title not in ["Bibliografía", "Enlaces Externos", "Referencias", "Véase también"]:
+        text += section.text + "\n"
+        text += get_page_text_without_sections(section)
+    return text
+
 def get_articles_from_cat(category_name, wiki):
     articles = set()
     category_name = f"Category:{category_name}"
